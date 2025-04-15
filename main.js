@@ -1,9 +1,33 @@
+// =============================================================================
+// code with express
+// =============================================================================
+// express = function, getting application
 const express = require("express");
 const app = express();
+const fs = require("fs");
+const template = require("./lib/template.js");
 
-app.get("/", (req, res) => res.send("Hello World!"));
+// get("/") = route, res.send = what you wanna show through the route
+app.get("/", (request, response) =>
+  fs.readdir("./data", function (error, filelist) {
+    var title = "Welcome";
+    var description = "Hello, Node.js";
+    var list = template.list(filelist);
+    var html = template.HTML(
+      title,
+      list,
+      `<h2>${title}</h2>${description}`,
+      `<a href="/create">create</a>`
+    );
+    response.send(html);
+  })
+);
+
 app.listen(3000, () => console.log("Example app listening on port 3000!"));
 
+// =============================================================================
+// code without express
+// =============================================================================
 // var http = require('http');
 // var fs = require('fs');
 // var url = require('url');
